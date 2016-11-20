@@ -414,6 +414,13 @@ $(document).ready(function(){
         $(window).scrollTop(0);
     });
 
+    $('#mask').click(function(){
+        prevpop = new Array();
+        prevpop_id = new Array();
+        if(is_selectuseraddbtn_clicked){
+            location.href = location.href;
+        }
+    });
 
     $('#mask, .an-exit__krest').click(function () {
         $('#mask').hide();
@@ -422,13 +429,15 @@ $(document).ready(function(){
         $('.az-fixed').removeClass('az-fixed2');
         $(document).scrollTop(az_posTop);
         az_posTop = -1;
-
     }); 
 
     $('.an-exit__krest2').click(function () {
         if(prevpop.length == 1){
             prevpop.pop();
             prevpop_id.pop();
+            if(is_selectuseraddbtn_clicked){
+                location.href = location.href;
+            }
         }
     });
 
@@ -552,6 +561,8 @@ $(document).ready(function(){
         }
         
     });
+
+    var is_selectuseraddbtn_clicked = false;
     $('#selectuseraddbtn').click(function(){
         var temp = $('#usersadd input[name="status"]').val();
         $.ajax({
@@ -563,8 +574,10 @@ $(document).ready(function(){
                 del : senddel
             },
             success: function () {
+                is_selectuseraddbtn_clicked = true;
+                $('#usersadd .an-exit__krest').trigger('click');
                 // alert(1);
-                location.href = location.href;
+                //location.href = location.href;
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);

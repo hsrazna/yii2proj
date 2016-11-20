@@ -158,30 +158,44 @@ class AjaxController extends Controller
 
     public function actionRegadd()
     {
-        $users = $_GET['data'];
-        $event_id = $_GET['id'];
-        $dels = $_GET['del'];
-        if(isset($users)){
-            foreach ($users as $user){
-                $event_user_status_role = new event_user_status_role();
-                $event_user_status_role->id_event = $event_id;
-                $event_user_status_role->id_user = $user;
-                $event_user_status_role->id_status = 1;
-                $event_user_status_role->id_role = 0;
-                $event_user_status_role->save();
-            }
-        }
-        if(isset($dels)){
-            foreach ($dels as $del){
-                $query = event_user_status_role::find()
-                    ->where(['and', 
-                                ['id_event' => $event_id],
-                                ['id_user' => $del],
-                                ['id_status' => 1],
-                                ['id_role' => 0],
-                            ])
-                    ->one()
-                    ->delete();
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $users = $_GET['data'];
+                $event_id = $_GET['id'];
+                $dels = $_GET['del'];
+                if(isset($event_id)){
+                    $temp2_query = event_user_status_role::find()->where([
+                        'id_user' => Yii::$app->user->getId(),
+                        'id_event' => $event_id,
+                        'id_status' => 2
+                    ])->one();
+                    if(isset($temp2_query)||$temp_query->id_status === 3){
+                        if(isset($users)){
+                            foreach ($users as $user){
+                                $event_user_status_role = new event_user_status_role();
+                                $event_user_status_role->id_event = $event_id;
+                                $event_user_status_role->id_user = $user;
+                                $event_user_status_role->id_status = 1;
+                                $event_user_status_role->id_role = 0;
+                                $event_user_status_role->save();
+                            }
+                        }
+                        if(isset($dels)){
+                            foreach ($dels as $del){
+                                $query = event_user_status_role::find()
+                                    ->where(['and', 
+                                                ['id_event' => $event_id],
+                                                ['id_user' => $del],
+                                                ['id_status' => 1],
+                                                ['id_role' => 0],
+                                            ])
+                                    ->one()
+                                    ->delete();
+                            }
+                        }
+                    }
+                }
             }
         }
     }
