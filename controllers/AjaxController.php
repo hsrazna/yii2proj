@@ -202,53 +202,67 @@ class AjaxController extends Controller
 
     public function actionActiveadd()
     {
-        $users = $_GET['data'];
-        $event_id = $_GET['id'];
-        $dels = $_GET['del'];
-        $roles = $_GET['role'];
-        if(isset($users)){
-            for($i=0;$i<count($users); $i++){
-                $event_user_status_role = new event_user_status_role();
-                $event_user_status_role->id_event = $event_id;
-                $event_user_status_role->id_user = $users[$i];
-                $event_user_status_role->id_status = 0;
-                $event_user_status_role->id_role = $roles[$i];
-                $event_user_status_role->save();
-                $rate = role::find()
-                    ->where(['id' => $roles[$i]])
-                    ->one();
-                $mark = $rate->mark;
-                $users_temp = users::find()
-                    ->where(['id' => $users[$i]])
-                    ->one();
-                $rate = $users_temp->rate;
-                $summ = $rate + $mark;
-                $users_temp->rate = $summ;
-                $users_temp->save();
-            }
-        }
-        if(isset($dels)){
-            foreach ($dels as $del){
-                $query = event_user_status_role::find()
-                    ->where(['and', 
-                                ['id_event' => $event_id],
-                                ['id_user' => $del],
-                                ['id_status' => 0],
-                            ])
-                    ->one();
-                $role = $query->id_role;
-                $query->delete();
-                $rate = role::find()
-                    ->where(['id' => $role])
-                    ->one();
-                $mark = $rate->mark;
-                $users_temp = users::find()
-                    ->where(['id' => $del])
-                    ->one();
-                $rate2 = $users_temp->rate;
-                $summ = $rate2 - $mark;
-                $users_temp->rate = $summ;//$users_temp->rate + $rate->mark;
-                $users_temp->save();
+        if(!Yii::$app->user->isGuest){
+            $users = $_GET['data'];
+            $event_id = $_GET['id'];
+            $dels = $_GET['del'];
+            $roles = $_GET['role'];
+            if(isset($event_id)){
+                $temp2_query = event_user_status_role::find()->where(
+                        [
+                            'id_user' => Yii::$app->user->getId(),
+                            'id_event' => $event_id,
+                            'id_status' => [2, 1]
+                        ]
+                    )->one();
+                $temp_query = users::findOne(Yii::$app->user->getId());
+                if ($temp_query->id_status === 3 || isset($temp2_query)){
+                    if(isset($users)){
+                        for($i=0;$i<count($users); $i++){
+                            $event_user_status_role = new event_user_status_role();
+                            $event_user_status_role->id_event = $event_id;
+                            $event_user_status_role->id_user = $users[$i];
+                            $event_user_status_role->id_status = 0;
+                            $event_user_status_role->id_role = $roles[$i];
+                            $event_user_status_role->save();
+                            $rate = role::find()
+                                ->where(['id' => $roles[$i]])
+                                ->one();
+                            $mark = $rate->mark;
+                            $users_temp = users::find()
+                                ->where(['id' => $users[$i]])
+                                ->one();
+                            $rate = $users_temp->rate;
+                            $summ = $rate + $mark;
+                            $users_temp->rate = $summ;
+                            $users_temp->save();
+                        }
+                    }
+                    if(isset($dels)){
+                        foreach ($dels as $del){
+                            $query = event_user_status_role::find()
+                                ->where(['and', 
+                                            ['id_event' => $event_id],
+                                            ['id_user' => $del],
+                                            ['id_status' => 0],
+                                        ])
+                                ->one();
+                            $role = $query->id_role;
+                            $query->delete();
+                            $rate = role::find()
+                                ->where(['id' => $role])
+                                ->one();
+                            $mark = $rate->mark;
+                            $users_temp = users::find()
+                                ->where(['id' => $del])
+                                ->one();
+                            $rate2 = $users_temp->rate;
+                            $summ = $rate2 - $mark;
+                            $users_temp->rate = $summ;//$users_temp->rate + $rate->mark;
+                            $users_temp->save();
+                        }
+                    }
+                }
             }
         }
     }

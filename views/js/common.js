@@ -59,16 +59,7 @@ $(document).ready(function(){
 
     function f_event(temp){
         //alert(temp.startdate);
-        // alert(my_id+'/'+temp.iCoordinator.id);
-        if(my_id != temp.iCoordinator.id && typeof(superuser) === 'undefined'){
-            $('#event_2').css('display', 'none');
-            $('#event_3').css('display', 'none');
-            $('#event_4').css('display', 'none');
-        } else {
-            $('#event_2').css('display', 'inline-block');
-            $('#event_3').css('display', 'inline-block');
-            $('#event_4').css('display', 'inline-block');
-        }
+        
         id_event2 = temp.id;
         id_event3 = temp.id;
         $('#usersadd .an-exit a').attr('dataId', id_event2);
@@ -99,6 +90,7 @@ $(document).ready(function(){
         searchingusers = new Array();
         usersin = new Array();
         
+        var is_registr = false;
         temp.registrator.forEach(function(item, j){
             searchingusers.push(item.id);
             usersin.push(item.id);
@@ -112,6 +104,7 @@ $(document).ready(function(){
                         item.lastname.slice(0,1) + '.' +
                         item.middlename
                         );
+            if(my_id == item.id){is_registr = true;}
         });
 
 
@@ -181,6 +174,25 @@ $(document).ready(function(){
         }
         $('#eventtable').html(strtemp);
         $('#activeadded').html(strtemp3);
+
+        // alert(my_id+'/'+temp.iCoordinator.id);
+        $('#event_2').css('display', 'none');
+        $('#event_3').css('display', 'none');
+        $('#event_4').css('display', 'none');
+        $('#event_5').css('display', 'none');
+        if(is_registr){
+            $('#event_5').css('display', 'inline-block');
+        }
+        if(my_id == temp.iCoordinator.id || typeof(superuser) !== 'undefined'){
+            $('#event_2').css('display', 'inline-block');
+            $('#event_3').css('display', 'inline-block');
+            $('#event_4').css('display', 'inline-block');
+            $('#event_5').css('display', 'inline-block');
+        }
+
+
+
+
     }
 
     function f_user(temp){
@@ -806,7 +818,8 @@ $(document).ready(function(){
             },
             success: function () {
                 // alert(1);
-                location.href = location.href;
+                //location.href = location.href;
+                $('#activeadd .an-exit__krest').trigger('click');
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status);
