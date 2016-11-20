@@ -127,8 +127,8 @@ class AjaxController extends Controller
                 ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
                 ->asArray()->all();
         }
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return array("query" => $query);
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        return array("query" => $query);
     }
     public function actionUsersadd2()
     {
