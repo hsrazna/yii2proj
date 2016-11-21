@@ -2,8 +2,9 @@
 use yii\helpers\Html;
 use yii\widgets\LinkPager;
 use yii\bootstrap\ActiveForm;
+use app\models\users;
 ?>
-
+<?php $temp_query = users::findOne(Yii::$app->user->getId()); ?>
 <section class="az-sec-table">
 	<h2>Группы</h2>
 	<?php $form = ActiveForm::begin(['id' => 'contact-form',
@@ -13,12 +14,20 @@ use yii\bootstrap\ActiveForm;
             'tag' => false,
         ],
     ],]); ?>
+    <?php if ($temp_query->id_status === 3 || $temp_query->id_status === 2): ?>
 		<?= Html::submitButton('<i class="fa fa-search" aria-hidden="true"></i>', ['class' => 'az-search3']) ?>
 		<?php $inputt = $form->field($model,'uname')->textInput(['maxlength' => 18, 'class' => 'az-col-99-100-px', 'placeholder' => "Наименование"])->label(false); ?>
 			<?php $inputt->template = "{input}"; ?>
 			<?= $inputt; ?>
 		<!-- <input type="text" placeholder="Наименование" class="az-col-99-100-px"> -->
 		<a href="#addGroup" rel="modal" class="az-col-100-px az-button-add">Добавить</a>
+	<?php else: ?>
+		<?= Html::submitButton('<i class="fa fa-search" aria-hidden="true"></i>', ['class' => 'az-search4']) ?>
+		<?php $inputt = $form->field($model,'uname')->textInput(['maxlength' => 18, 'class' => 'az-col-100', 'placeholder' => "Наименование"])->label(false); ?>
+			<?php $inputt->template = "{input}"; ?>
+			<?= $inputt; ?>
+		<!-- <input type="text" placeholder="Наименование" class="az-col-99-100-px"> -->
+	<?php endif; ?>
 	<?php ActiveForm::end(); ?>
 	<?= $_SERVER['ROOT']; ?>
 	<table id="example" class="az-table table table-striped table-hover dt-responsive">

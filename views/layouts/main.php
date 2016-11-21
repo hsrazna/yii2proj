@@ -123,11 +123,13 @@ AppAsset::register($this);
                     <span class="az-style1 az-col-99-150-px" id="group1"></span>
                 </div>
             </div>
+            <?php if ($temp_query->id_status === 3 || $temp_query->id_status === 2): ?>
             <div class="az-form az-row az-center">
                 <a id="group2" href="#usersadd" data-status="usersadd2" rel="modal" class="az-col-200-px az-button-add"><i class="fa fa-plus" aria-hidden="true"></i> Добавить активиста</a>
                 <a id="group3" href="#changeGroup" rel="modal" class="az-col-200-px az-button-add"><i class="fa fa-refresh" aria-hidden="true"></i> Изменить группу</a>
                 <a id="group4" href="#" class="az-col-200-px az-button-add"><i class="fa fa-trash" aria-hidden="true"></i> Удалить группу</a>
             </div>
+            <?php endif; ?>
             <table class="az-table">
                 <thead class="table-head">
                     <tr>

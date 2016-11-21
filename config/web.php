@@ -31,7 +31,7 @@ $config = [
         ],
 
         'errorHandler' => [
-            'errorAction' => 'site/error',
+            'errorAction' => 'site/errorkbsu',
         ],
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',

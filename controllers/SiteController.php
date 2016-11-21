@@ -74,21 +74,12 @@ class SiteController extends Controller
         ];
     }
 
-
-    /**
-     * Displays homepage.
-     *
-     * @return string
-     */
     public function actionIndex()
     {
         $modellog = new LoginForm();
-        // print_r($_POST);
-        
 
         if (($modellog->load(Yii::$app->request->post()) && $modellog->login())||!Yii::$app->user->isGuest) {
             $model = new SearchUser();
-            // print_r($model);
             if($model->load(Yii::$app->request->post()) && $model->validate()){
 
                 $query = users::find()
@@ -137,82 +128,14 @@ class SiteController extends Controller
             return $this->render('login', [
                 'modellog' => $modellog,
             ]);
-            // return $this->goHome();
         }
     }
 
-    
-    /**
-     * Login action.
-     *
-     * @return string
-     */
-    // public function actionLogin()
-    // {
-        
-    //     if (!Yii::$app->user->isGuest) {
-    //         return $this->goHome();
-    //     }
-    //     // echo 'a';
-    //     $model = new LoginForm();
-    //     // echo 'a';
-
-    //     if ($model->load(Yii::$app->request->post()) && $model->login()) {
-    //         // echo 'a';
-    //         // return $this->goBack();
-    //         return $this->render('rating', [
-    //             'model' => $model,
-    //             // 'layoutmy' => $this->layout,
-    //         ]);
-    //     }
-    //     $this->layout = 'main2';
-    //     return $this->render('login', [
-    //         'model' => $model,
-    //         // 'layoutmy' => $this->layout,
-    //     ]);
-    // }
-
-    /**
-     * Logout action.
-     *
-     * @return string
-     */
     public function actionLogout()
     {
         Yii::$app->user->logout();
-        $modellog = new LoginForm();
-        // thisactionIndex();
         return $this->goHome();
-        $this->layout = 'main2';
-        return $this->render('login', [
-            'modellog' => $modellog,
-            // 'layoutmy' => $this->layout,
-        ]);
     }
-
-    /**
-     * Displays contact page.
-     *
-     * @return string
-     */
-    // public function actionContact()
-    // {
-    //     $model = new ContactForm();
-    //     if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-    //         Yii::$app->session->setFlash('contactFormSubmitted');
-
-    //         return $this->refresh();
-    //     }
-    //     return $this->render('contact', [
-    //         'model' => $model,
-    //     ]);
-    // }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
 
     public function actionEvent()
     {  
@@ -514,32 +437,35 @@ class SiteController extends Controller
                 $query = groups::find();
             }
             if($model2->load(Yii::$app->request->post())){
-                if($model2->id == -1){
-                    $model2->imageFile = UploadedFile::getInstance($model2, 'imageFile');
-                    if ($model2->validate()) {
-                        $user = new groups();
-                        $user->uname = $model2->uname;
-                        $user->save();
-                        if($model2->imageFile){
-                            $urltemp = 'views/grouplogo/' . $user->id . '.' . $model2->imageFile->extension;
-                            $model2->imageFile->saveAs($urltemp);
-                            $user->url = $urltemp;
-                        }
-                        $user->save();
-                    }
-                } else {
-                    $model2->imageFile = UploadedFile::getInstance($model2, 'imageFile');
-                    if ($model2->validate()) {
-                        $user = groups::find()->where(['id' => $model2->id])->one();
-                        if($model2->uname){
+                $temp_query = users::findOne(Yii::$app->user->getId());
+                if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                    if($model2->id == -1){
+                        $model2->imageFile = UploadedFile::getInstance($model2, 'imageFile');
+                        if ($model2->validate()) {
+                            $user = new groups();
                             $user->uname = $model2->uname;
+                            $user->save();
+                            if($model2->imageFile){
+                                $urltemp = 'views/grouplogo/' . $user->id . '.' . $model2->imageFile->extension;
+                                $model2->imageFile->saveAs($urltemp);
+                                $user->url = $urltemp;
+                            }
+                            $user->save();
                         }
-                        if($model2->imageFile){
-                            $urltemp = 'views/grouplogo/' . $model2->id . '.' . $model2->imageFile->extension;
-                            $model2->imageFile->saveAs($urltemp);
-                            $user->url = $urltemp;
+                    } else {
+                        $model2->imageFile = UploadedFile::getInstance($model2, 'imageFile');
+                        if ($model2->validate()) {
+                            $user = groups::find()->where(['id' => $model2->id])->one();
+                            if($model2->uname){
+                                $user->uname = $model2->uname;
+                            }
+                            if($model2->imageFile){
+                                $urltemp = 'views/grouplogo/' . $model2->id . '.' . $model2->imageFile->extension;
+                                $model2->imageFile->saveAs($urltemp);
+                                $user->url = $urltemp;
+                            }
+                            $user->save();
                         }
-                        $user->save();
                     }
                 }
             }
@@ -561,66 +487,33 @@ class SiteController extends Controller
                 'href' => '#menu-groups'
             ]);
         } else {
-            $modellog = new LoginForm();
-            // return $this->goHome();
             $this->layout = 'main2';
-            return $this->render('404', [
-                'modellog' => $modellog,
-                // 'layoutmy' => $this->layout,
-            ]);
+            return $this->render('404');
         }
     }
-    
 
     public function actionMemo()
     {
         if(!Yii::$app->user->isGuest){
             return $this->render('memo');
         } else {
-            $modellog = new LoginForm();
-            // return $this->goHome();
             $this->layout = 'main2';
-            return $this->render('404', [
-                'modellog' => $modellog,
-                // 'layoutmy' => $this->layout,
-            ]);
+            return $this->render('404');
         }
     }
+
     public function actionSettings()
     {
         if(!Yii::$app->user->isGuest){
             return $this->render('settings');
         } else {
-            $modellog = new LoginForm();
-            // return $this->goHome();
             $this->layout = 'main2';
-            return $this->render('404', [
-                'modellog' => $modellog,
-                // 'layoutmy' => $this->layout,
-            ]);
+            return $this->render('404');
         }
     }
-    // public function actionKbsu($message = "Hiii")
-    // {
-    //     $kbsu = users::findOne(1);
-    //     $message = $kbsu->uname;
-    //     return $this->render('kbsu', ['message' => $message]);
-    // }
 
-    // public function actionEntry()
-    // {
-
-    //     $model = new EntryForm();
-        
-    //     if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            
-    //         return $this->render('login2', ['model' => $model]);
-
-    //     } else {
-            
-    //         return $this->render('login', ['model' => $model]);
-
-    //     }
-
-    // }
+    public function actionErrorkbsu(){
+        $this->layout = 'main2';
+        return $this->render('404');
+    }
 }

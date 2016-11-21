@@ -488,6 +488,16 @@ div.icons_style {
   color: #ccc;
   font-size: 12px; }
 
+.az-search4 {
+  position: absolute;
+  top: 3px;
+  left: calc(100% - 22px);
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #ccc;
+  font-size: 12px; }
+
 /*form*/
 /*table-buttons*/
 .next-prev {
