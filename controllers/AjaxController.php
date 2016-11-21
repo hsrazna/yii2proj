@@ -24,6 +24,7 @@ class AjaxController extends Controller
   
     public function actionEvent()
     {
+        if(!Yii::$app->user->isGuest){
             $id_event = $_GET['data'];
             $query = event::find()
                 ->where(['id' => $id_event])
@@ -38,9 +39,11 @@ class AjaxController extends Controller
         
             Yii::$app->response->format = Response::FORMAT_JSON;
             return array("query" => $query);
+        }
     }
     public function actionActivist()
     {
+        if(!Yii::$app->user->isGuest){
             $id_user = $_GET['data'];
             $query = users::find()
                 ->where(['id' => $id_user])
@@ -51,9 +54,11 @@ class AjaxController extends Controller
         
             Yii::$app->response->format = Response::FORMAT_JSON;
             return array("query" => $query);
+        }
     }
     public function actionGroup()
     {
+        if(!Yii::$app->user->isGuest){
             $id_group = $_GET['data'];
             $query = groups::find()
                 ->where(['id' => $id_group])
@@ -62,96 +67,112 @@ class AjaxController extends Controller
         
             Yii::$app->response->format = Response::FORMAT_JSON;
             return array("query" => $query);
+        }
     }
     public function actionFinduser()
     {
-            $uname = $_GET['data'];
-            $is_coord = $_GET['is_coord'];
-            if(count($uname)==0){
-                if(isset($is_coord)){
-                    $argwhere = ['id_status' => 2];
-                } else {
-                    $argwhere = '';
-                }
-            } else if(count($uname)==1){
-                if(isset($is_coord)){
-                    $argwhere = ['and',
-                                    ['or',
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $uname = $_GET['data'];
+                $is_coord = $_GET['is_coord'];
+                if(count($uname)==0){
+                    if(isset($is_coord)){
+                        $argwhere = ['id_status' => 2];
+                    } else {
+                        $argwhere = '';
+                    }
+                } else if(count($uname)==1){
+                    if(isset($is_coord)){
+                        $argwhere = ['and',
+                                        ['or',
+                                            ['like', 'middlename', $uname[0]],
+                                            ['like', 'uname', $uname[0]],
+                                            ['like', 'lastname', $uname[0]],
+                                        ],
+                                        ['id_status' => 2]
+                                    ];
+                    } else {
+                        $argwhere = ['or',
                                         ['like', 'middlename', $uname[0]],
                                         ['like', 'uname', $uname[0]],
                                         ['like', 'lastname', $uname[0]],
-                                    ],
-                                    ['id_status' => 2]
-                                ];
+                                    ];
+                    }
                 } else {
-                    $argwhere = ['or',
-                                    ['like', 'middlename', $uname[0]],
-                                    ['like', 'uname', $uname[0]],
-                                    ['like', 'lastname', $uname[0]],
-                                ];
+                    $argwhere = ['and'];
+                    for($i=0; $i<count($uname);$i++){
+                        array_push($argwhere,   ['or',
+                                                    ['like', 'middlename', $uname[$i]],
+                                                    ['like', 'uname', $uname[$i]],
+                                                    ['like', 'lastname', $uname[$i]],
+                                                ]); 
+                    }
+                    if(isset($is_coord)){
+                        array_push($argwhere, ['id_status' => 2]);
+                    }
                 }
-            } else {
-                $argwhere = ['and'];
-                for($i=0; $i<count($uname);$i++){
-                    array_push($argwhere,   ['or',
-                                                ['like', 'middlename', $uname[$i]],
-                                                ['like', 'uname', $uname[$i]],
-                                                ['like', 'lastname', $uname[$i]],
-                                            ]); 
-                }
-                if(isset($is_coord)){
-                    array_push($argwhere, ['id_status' => 2]);
-                }
+                $query = users::find()
+                    ->where($argwhere)
+                    ->limit(10)
+                    ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
+                    ->asArray()->all();
+            
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return array("query" => $query);
             }
-            $query = users::find()
-                ->where($argwhere)
-                ->limit(10)
-                ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
-                ->asArray()->all();
-        
-            Yii::$app->response->format = Response::FORMAT_JSON;
-            return array("query" => $query);
+        }
     }
     public function actionUsersadd()
     {
-        $is_coord = $_GET['is_coord'];
-        if(isset($is_coord)){
-            $query = users::find()
-                ->where(['id_status' => 2])
-                ->limit(10)
-                ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
-                ->asArray()->all();
-        } else {
-            $query = users::find()
-                ->limit(10)
-                ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
-                ->asArray()->all();
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $is_coord = $_GET['is_coord'];
+                if(isset($is_coord)){
+                    $query = users::find()
+                        ->where(['id_status' => 2])
+                        ->limit(10)
+                        ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
+                        ->asArray()->all();
+                } else {
+                    $query = users::find()
+                        ->limit(10)
+                        ->orderBy(['middlename' => SORT_ASC, 'uname' => SORT_ASC, 'lastname' => SORT_ASC])
+                        ->asArray()->all();
+                }
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return array("query" => $query);
+            }
         }
-        Yii::$app->response->format = Response::FORMAT_JSON;
-        return array("query" => $query);
     }
     public function actionUsersadd2()
     {
-        $users = $_GET['data'];
-        $group_id = $_GET['id'];
-        $dels = $_GET['del'];
-        if(isset($users)){
-            foreach ($users as $user){
-                $group_user = new group_user();
-                $group_user->id_group = $group_id;
-                $group_user->id_user = $user;
-                $group_user->save();
-            }
-        }
-        if(isset($dels)){
-            foreach ($dels as $del){
-                $query = group_user::find()
-                    ->where(['and', 
-                                ['id_group' => $group_id],
-                                ['id_user' => $del],
-                            ])
-                    ->one()
-                    ->delete();
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $users = $_GET['data'];
+                $group_id = $_GET['id'];
+                $dels = $_GET['del'];
+                if(isset($users)){
+                    foreach ($users as $user){
+                        $group_user = new group_user();
+                        $group_user->id_group = $group_id;
+                        $group_user->id_user = $user;
+                        $group_user->save();
+                    }
+                }
+                if(isset($dels)){
+                    foreach ($dels as $del){
+                        $query = group_user::find()
+                            ->where(['and', 
+                                        ['id_group' => $group_id],
+                                        ['id_user' => $del],
+                                    ])
+                            ->one()
+                            ->delete();
+                    }
+                }
             }
         }
     }
