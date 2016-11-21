@@ -439,6 +439,10 @@ div.icons_style{
     margin-right: 10%;
     vertical-align: top;
 }
+.az-col-push-0{
+    margin-right: 0%;
+    // vertical-align: top;
+}
 [class*="az-col"]:last-child{
     margin-right: 0px;
     //vertical-align: top;
@@ -836,6 +840,7 @@ textarea{
     padding: 5px;
 }
 
+/*404 page*/
 .p404-pad{
     padding: 15px;
 }
@@ -847,9 +852,13 @@ textarea{
     font-family: "OpenSans-Regular";
     font-size: 23px;
 }
+/*404 page*/
 
-
-
+/*datepicker*/
+.dropdown-menu{
+    padding: 5px 5px;
+}
+/*datepicker*/
 /*==========  Desktop First Method  ==========*/
 
 /* Large Devices, Wide Screens */

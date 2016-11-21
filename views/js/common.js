@@ -300,6 +300,35 @@ $(document).ready(function(){
             // alert(coordd_id);
         }
     }
+
+    function f_findsz(temp, tagid){
+
+        var strtemp = '';
+        for (i=0; i<temp.length; i++){
+            strtemp += '<option value="' + 
+            temp[i].id + '">' +
+            temp[i].uname + ' ' +
+            '</option>';
+        }
+        // alert(strtemp);
+        // alert(tagid);
+
+            
+        // }
+
+        $(tagid).html(strtemp);
+    }
+
+    function f_fillsz(temp){
+        // alert(temp[0].header);
+        $('#szid').val(temp.id);
+        $('#szheader').val(temp.header);
+        $('#sztitle').val(temp.title);
+        $('#szcontent').val(temp.content);
+        var datetemp = new Date(temp.date);
+        $('#szdate').val(datetemp.toLocaleDateString());
+        $('#szparaph').val(temp.paraph);
+    }
 /*functions*/
 
 /*popups*/
@@ -369,7 +398,7 @@ $(document).ready(function(){
             // alert(tempdata);
         }
         // alert(tempdata);
-        if (id == '#event' || id == '#activist' || id == '#group' || id == '#usersadd' || id == '#addEvent' || id == '#activeadd' || id == '#changeEvent'){
+        if (id == '#event' || id == '#activist' || id == '#group' || id == '#usersadd' || id == '#addEvent' || id == '#activeadd' || id == '#changeEvent' || id == '#szopen'){
             // alert(1);
             var controllername = (id!='#addEvent'&&id!='#activeadd'&&id!='#changeEvent')?id.slice(1):(id=='#changeEvent')?'finduser':'usersadd';
             var is_coord;
@@ -399,6 +428,7 @@ $(document).ready(function(){
                     else if(id == '#addEvent'){f_finduser(temp.query, '#selectcoord');}
                     else if(id == '#changeEvent'){f_finduser(temp.query, '#selectcoord2');}
                     else if(id == '#activeadd'){f_finduser(temp.query, '#selectactive');}
+                    else if(id == '#szopen'){f_findsz(temp.query, '#selectsz');}
 
                     // else if(id == '#addEvent'){f_finduser(temp.query, '#selectcoord');}
 
@@ -868,5 +898,92 @@ $(document).ready(function(){
     });
 /*change event*/
 
+/*memo*/
+    $('#findsz').keyup(function(e) {
+        var val = $('#findsz').val();
+        var szname = val.split(' ', 3);
+        // alert(id_event2);
+        $.ajax({
+            url: "/ajax/findsz",
+            type: 'get',
+            data: {
+                data : szname,
+            },
+            success: function (data) {
+                // alert(JSON.stringify(data));
+                temp = eval(data);
+                f_findsz(temp.query, '#selectsz');
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+              }
+        });
+    });
+
+    $('#selectszbtn').click(function(){
+        var id = $('#szopen #selectsz').val();
+        $.ajax({
+            url: "/ajax/findszbyid",
+            type: 'get',
+            data: {
+                id : id,
+            },
+            success: function (data) {
+                // alert(JSON.stringify(data));
+                temp = eval(data);
+                f_fillsz(temp.query[0]);
+                $('#szopen .an-exit__krest').trigger('click');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+              }
+        });
+        
+        return false;
+    });
+
+    $('#sznew').click(function(){
+        $('#szid').val(-1);
+        $('#szheader').val('');
+        $('#sztitle').val('');
+        $('#szcontent').val('');
+        $('#szdate').val('');
+        $('#szparaph').val('');
+        return false;
+    });
+
+    $('#szsave').click(function(){
+
+        var data = {
+            id : $('#szid').val(),
+            header : $('#szheader').val(),
+            title : $('#sztitle').val(),
+            content : $('#szcontent').val(),
+            date : $('#szdate').val(),
+            paraph : $('#szparaph').val(),
+        }
+        $.ajax({
+            url: "/ajax/savesz",
+            type: 'get',
+            data: {
+                data : data,
+            },
+            success: function (data) {
+                alert(data);
+                // alert(JSON.stringify(data));
+                // temp = eval(data);
+                // f_fillsz(temp.query[0]);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status);
+                alert(thrownError);
+              }
+        });
+        return false;
+    });
+/*memo*/
 });
 

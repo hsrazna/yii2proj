@@ -18,6 +18,7 @@ use app\models\role;
 use app\models\AddGroup;
 use app\models\group_user;
 use app\models\event_user_status_role;
+use app\models\memo;
 
 class AjaxController extends Controller
 {
@@ -69,7 +70,7 @@ class AjaxController extends Controller
             return array("query" => $query);
         }
     }
-    public function actionFinduser() /**/
+    public function actionFinduser()
     {
         if(!Yii::$app->user->isGuest){
             $event_id = $_GET['id'];
@@ -320,6 +321,7 @@ class AjaxController extends Controller
                 group_user::deleteAll(['id_group' => $group_id]);
         }
     }
+
     public function actionEventremove()
     {
         if(!Yii::$app->user->isGuest){
@@ -347,6 +349,88 @@ class AjaxController extends Controller
                         $event->delete();
                     }
                 }
+            }
+        }
+    }
+
+    public function actionSzopen()
+    {
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $query = memo::find()
+                    ->limit(10)
+                    ->orderBy(['uname' => SORT_ASC])
+                    ->asArray()->all();
+            
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return array("query" => $query);
+            }
+        }
+    }
+    public function actionFindsz()
+    {
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $uname = $_GET['data'];
+                
+                if(count($uname)==0){
+                    $argwhere = '';
+                } else if(count($uname)==1){
+                    $argwhere = ['like', 'uname', $uname[0]];
+
+                } else {
+                    $argwhere = ['and'];
+                    for($i=0; $i<count($uname);$i++){
+                        array_push($argwhere, ['like', 'uname', $uname[$i]]); 
+                    }
+                }
+                $query = memo::find()
+                    ->where($argwhere)
+                    ->limit(10)
+                    ->orderBy(['uname' => SORT_ASC])
+                    ->asArray()->all();
+            
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return array("query" => $query);
+            }
+        }
+    }
+    public function actionFindszbyid()
+    {
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $memo_id = $_GET['id'];
+                
+                $query = memo::find()
+                    ->where(['id' => $memo_id])
+                    ->asArray()->all();
+            
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return array("query" => $query);
+            }
+        }
+    }
+    public function actionSavesz()
+    {
+        if(!Yii::$app->user->isGuest){
+            $temp_query = users::findOne(Yii::$app->user->getId());
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+                $data = $_GET['data'];
+                print_r($data);
+                print_r($data['id']);
+                // $memo_temp = memo::findOne($data->id);
+                // print_r($memo_temp);
+                            // ->where(['id' => $data->id])
+                            // ->one();
+                // $memo_temp->header = $data->header;
+                // $memo_temp->title = $data->title;
+                // $memo_temp->content = $data->content;
+                // $memo_temp->date = date('Y-m-d', strtotime($data->date));
+                // $memo_temp->paraph = $data->paraph;
+                // $memo_temp->save();
             }
         }
     }

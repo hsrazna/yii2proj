@@ -913,7 +913,7 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
 <div id="szopen" class="window">
     <div class="registr">
         <div class="an-exit">
-            <a href="#" rel="modal" class="an-exit__krest"><i class="fa fa-times " aria-hidden="true"></i></a>
+            <span class="an-exit__krest"><i class="fa fa-times " aria-hidden="true"></i></span>
         </div>
         <div class="titregbox ah_titregbox">
             <span class="titreg">Служебные записки</span>
@@ -941,7 +941,7 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
                     <div class="clearfix"></div>
                     
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                        <button type="submit" class="ah_btn" id="selectuserbtn">Открыть</button>
+                        <button type="submit" class="ah_btn" id="selectszbtn">Открыть</button>
                     </div>
 
                     <div class="clearfix"></div>
