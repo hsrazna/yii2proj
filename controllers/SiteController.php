@@ -495,7 +495,7 @@ class SiteController extends Controller
     public function actionMemo()
     {
         if(!Yii::$app->user->isGuest){
-            return $this->render('memo');
+            return $this->render('memo', ['href' => '#menu-memo']);
         } else {
             $this->layout = 'main2';
             return $this->render('404');
@@ -505,7 +505,7 @@ class SiteController extends Controller
     public function actionSettings()
     {
         if(!Yii::$app->user->isGuest){
-            return $this->render('settings');
+            return $this->render('settings', ['href' => '#menu-settings']);
         } else {
             $this->layout = 'main2';
             return $this->render('404');

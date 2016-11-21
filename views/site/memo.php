@@ -1,7 +1,7 @@
 <section class="az-sec-table">
 	<h2>Печать с/з</h2>
 	<div class="az-form az-row">
-		<a class="az-button-add az-col-100-px" href="#"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Открыть</a>
+		<a class="az-button-add az-col-100-px" href="#szopen" rel="modal"><i class="fa fa-folder-open-o" aria-hidden="true"></i> Открыть</a>
 		<a class="az-button-add az-col-100-px" href="#"><i class="fa fa-floppy-o" aria-hidden="true"></i> Сохранить</a>
 		<a class="az-button-add az-col-100-px" href="#"><i class="fa fa-search" aria-hidden="true"></i> Просмотр</a>
 		<a class="az-button-add az-col-100-px" href="#"><i class="fa fa-print" aria-hidden="true"></i> Печать</a>
@@ -30,3 +30,9 @@
 	<option value="служебная записка"></option>
 	<option value="что то еще"></option>
 </datalist>
+
+<script>
+$(document).ready(function(){
+	$('<?= $href; ?>').addClass('current-link');
+});
+</script>

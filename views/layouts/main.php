@@ -907,6 +907,51 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
     </div>
 </div>
 
+<?php
+if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
+?>
+<div id="szopen" class="window">
+    <div class="registr">
+        <div class="an-exit">
+            <a href="#" rel="modal" class="an-exit__krest"><i class="fa fa-times " aria-hidden="true"></i></a>
+        </div>
+        <div class="titregbox ah_titregbox">
+            <span class="titreg">Служебные записки</span>
+        </div>
+        <form action="" class="common-form ah_form form1">
+            <div class="row">
+                <div class="formwrapper ah_formwrapper">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <!-- <label for="ah_upinput" class="ah_uplabel">Текст для заголовка input-a</label> -->
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <input type="text" name="uname" class="az-evname2" id="findsz" value="">
+                    </div>
+
+                    <div class="clearfix"></div>
+
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <select multiple class="ah-form-control" id="selectsz">
+                        </select>
+                    </div>
+
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button type="submit" class="ah_btn" id="selectuserbtn">Открыть</button>
+                    </div>
+
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>
+
 
 <?php //$this->endBody() ?>
 <script src="../../views/js/common.js"></script>

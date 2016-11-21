@@ -16,3 +16,8 @@
 		<a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a>
 	</div>
 </section>
+<script>
+$(document).ready(function(){
+	$('<?= $href; ?>').addClass('current-link');
+});
+</script>
