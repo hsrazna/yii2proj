@@ -69,11 +69,23 @@ class AjaxController extends Controller
             return array("query" => $query);
         }
     }
-    public function actionFinduser()
+    public function actionFinduser() /**/
     {
         if(!Yii::$app->user->isGuest){
+            $event_id = $_GET['id'];
+            // echo $event_id
+            if(isset($event_id)){
+                $temp2_query = event_user_status_role::find()->where(
+                        [
+                            'id_user' => Yii::$app->user->getId(),
+                            'id_event' => $event_id,
+                            'id_status' => 1
+                        ]
+                    )->one();
+                // print_r($temp2_query);
+            }
             $temp_query = users::findOne(Yii::$app->user->getId());
-            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2 || isset($temp2_query)){
                 $uname = $_GET['data'];
                 $is_coord = $_GET['is_coord'];
                 if(count($uname)==0){
@@ -123,11 +135,22 @@ class AjaxController extends Controller
             }
         }
     }
-    public function actionUsersadd()
+    public function actionUsersadd() 
     {
         if(!Yii::$app->user->isGuest){
+            $event_id = $_GET['id'];
+            if(isset($event_id)){
+                $temp2_query = event_user_status_role::find()->where(
+                        [
+                            'id_user' => Yii::$app->user->getId(),
+                            'id_event' => $event_id,
+                            'id_status' => 1
+                        ]
+                    )->one();
+                // print_r($temp2_query);
+            }
             $temp_query = users::findOne(Yii::$app->user->getId());
-            if ($temp_query->id_status === 3 || $temp_query->id_status === 2){
+            if ($temp_query->id_status === 3 || $temp_query->id_status === 2 || isset($temp2_query)){
                 $is_coord = $_GET['is_coord'];
                 if(isset($is_coord)){
                     $query = users::find()

@@ -376,6 +376,7 @@ $(document).ready(function(){
             if(id == '#addEvent' || id == '#changeEvent'){
                 is_coord = true;
             }
+            // alert(id_event2);
             // alert(is_coord);
             // alert(controllername);
             $.ajax({
@@ -383,11 +384,12 @@ $(document).ready(function(){
                 type: 'get',
                 data: {
                     data : tempdata,
-                    is_coord : is_coord
+                    is_coord : is_coord,
+                    id : id_event2
                 },
                 success: function (data) {
                     // data = '('+data+')';
-                    // alert(data);
+                    // alert(JSON.stringify(data));
                     temp = eval(data);
                     // alert(temp);
                     if(id == '#event'){f_event(temp.query);}
@@ -745,14 +747,18 @@ $(document).ready(function(){
     $('#findactive').keyup(function(e) {
         var val = $('#findactive').val();
         var fio = val.split(' ', 3);
+        // alert(id_event2);
         $.ajax({
             url: "/ajax/finduser",
             type: 'get',
             data: {
-                data : fio
+                data : fio,
+                id : id_event2
             },
             success: function (data) {
+                // alert(data);
                 temp = eval(data);
+
                 f_finduser(temp.query, '#selectactive');
 
             },
@@ -819,6 +825,7 @@ $(document).ready(function(){
             success: function () {
                 // alert(1);
                 //location.href = location.href;
+                is_selectuseraddbtn_clicked = true;
                 $('#activeadd .an-exit__krest').trigger('click');
             },
             error: function (xhr, ajaxOptions, thrownError) {

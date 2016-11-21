@@ -701,48 +701,54 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
 </div>
 <?php endif; ?>
 
-
+<?php
+if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
+?>
 <div id="addGroup" class="window">
     <div class="registr">
-            <div class="an-exit">
-                <span class="an-exit__krest"><i class="fa fa-times" aria-hidden="true"></i></span>
-            </div>
-            <div class="titregbox ah_titregbox">
-                <span class="titreg">Добавить группу</span>
-            </div>
-            <form action="/site/groups" class="common-form ah_form form5" method="post" enctype="multipart/form-data">
-                <div class="row">
-                    <div class="formwrapper ah_formwrapper">
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <label for="ah_upinput" class="ah_uplabel">Название группы</label>
-                        </div>
+        <div class="an-exit">
+            <span class="an-exit__krest"><i class="fa fa-times" aria-hidden="true"></i></span>
+        </div>
+        <div class="titregbox ah_titregbox">
+            <span class="titreg">Добавить группу</span>
+        </div>
+        <form action="/site/groups" class="common-form ah_form form5" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="formwrapper ah_formwrapper">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <label for="ah_upinput" class="ah_uplabel">Название группы</label>
+                    </div>
 
-                        <div class="clearfix"></div>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <?= Html::hiddenInput(\Yii::$app->getRequest()->csrfParam, \Yii::$app->getRequest()->getCsrfToken(), []); ?>
-                            <input type="text"  name="AddGroup[uname]" id="ah_upinput" class="az-evname" value="">
-                            <input type="hidden"  name="AddGroup[id]" id="ah_upinput" class="az-evname" value="-1">
-                        </div>
+                    <div class="clearfix"></div>
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <?= Html::hiddenInput(\Yii::$app->getRequest()->csrfParam, \Yii::$app->getRequest()->getCsrfToken(), []); ?>
+                        <input type="text"  name="AddGroup[uname]" id="ah_upinput" class="az-evname" value="">
+                        <input type="hidden"  name="AddGroup[id]" id="ah_upinput" class="az-evname" value="-1">
+                    </div>
 
-                        <div class="clearfix"></div>
-                        
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <input type="hidden" name="AddGroup[imageFile]" >
-                            <input type="file" id="f1" class="az-none az-file" accept="image/*" name="AddGroup[imageFile]" value="">
-                            <label for="f1" class="az-file2">Прикрепить фото</label>
-                        </div>
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <input type="hidden" name="AddGroup[imageFile]" >
+                        <input type="file" id="f1" class="az-none az-file" accept="image/*" name="AddGroup[imageFile]" value="">
+                        <label for="f1" class="az-file2">Прикрепить фото</label>
+                    </div>
 
-                        <div class="clearfix"></div>
-                        
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                            <button type="submit" class="ah_btn">ОК</button>
-                        </div>
+                    <div class="clearfix"></div>
+                    
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <button type="submit" class="ah_btn">ОК</button>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
 </div>
+<?php endif; ?>
 
+<?php
+if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
+?>
 <div id="changeGroup" class="window">
     <div class="registr">
             <div class="an-exit">
@@ -784,7 +790,11 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
             </form>
         </div>
 </div>
+<?php endif; ?>
 
+<?php
+if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
+?>
 <div id="usersadd" class="window">
     <div class="registr">
         <div class="an-exit">
@@ -835,6 +845,7 @@ if ($temp_query->id_status === 3 || $temp_query->id_status === 2):
         </form>
     </div>
 </div>
+<?php endif; ?>
 
 <div id="activeadd" class="window">
     <div class="registr">
